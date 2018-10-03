@@ -1,6 +1,6 @@
-# Govi Mithuru
+# Game Leaderboard
 
-Govi mithuru application for dialog.
+Game leaderboard back-end API using Spring-boot
 
 ### Prerequisites
 
@@ -9,12 +9,12 @@ Govi mithuru application for dialog.
 ## Deployment
 
 These are the Envronment variables,
-* DB_HOST=localhost
-* DB_NAME=govi_mithuru
-* DB_PORT=3306
+* DB_HOST=
+* DB_NAME=
+* DB_PORT=
  
 
-* DB_USER_NAME=ROOT
+* DB_USER_NAME=
 * DB_PASSWORD=
 
 ## Built With
