@@ -2,7 +2,6 @@
 
 Govi mithuru application for dialog.
 
-
 ### Prerequisites
 
 
