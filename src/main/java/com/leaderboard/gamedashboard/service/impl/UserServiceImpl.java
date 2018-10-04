@@ -8,6 +8,7 @@ import com.leaderboard.gamedashboard.model.User;
 import com.leaderboard.gamedashboard.repository.ScoreRepository;
 import com.leaderboard.gamedashboard.repository.UserRepository;
 import com.leaderboard.gamedashboard.service.UserService;
+import com.leaderboard.gamedashboard.util.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -40,20 +41,47 @@ public class UserServiceImpl implements UserService {
             ResponseModel res = new ResponseModel(HttpStatus.BAD_REQUEST.value(), "Error. Cannot find user details.", false);
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
+        User user = null;
+        boolean isNewUser = false;
+        Optional<User> byMobileNumber = userRepository.getByMobileNumber(userDTO.getMobileNumber());
+        if (byMobileNumber.isPresent()) {
 
-        User user = new User();
+            user = byMobileNumber.get();
+            isNewUser = false;
+
+        } else {
+            user = new User();
+            isNewUser = true;
+        }
+
         user.setNickName(userDTO.getNickName());
         user.setGender(userDTO.getGender());
         user.setLocation(userDTO.getLocation());
         user.setMobileNumber(userDTO.getMobileNumber());
         user.setFb_id(userDTO.getFb_id());
 
+
         ScoreDTO scoreDTO = userDTO.getScoreDTOS().get(0);
         Score score = new Score();
         score.setDate(new Date());
-        score.setScore(scoreDTO.getScore());
 
-        user.setHighScore(scoreDTO.getScore());
+        /**
+         * decode score
+         */
+        String decode = new Encoder().decode(scoreDTO.getScore());
+        int i = Integer.parseInt(decode);
+
+        score.setScore(i);
+
+        if (isNewUser) {
+            user.setHighScore(i);
+        } else {
+            int lastHighScore = byMobileNumber.get().getHighScore();
+            if (i > lastHighScore) {
+                user.setHighScore(i);
+            }
+        }
+
 
         User save = userRepository.save(user);
 
@@ -85,7 +113,9 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
 
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
@@ -93,9 +123,11 @@ public class UserServiceImpl implements UserService {
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
+
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
 
                 scoreDTOS.add(scoreDTO);
 
@@ -131,7 +163,9 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
+
 
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
@@ -139,9 +173,10 @@ public class UserServiceImpl implements UserService {
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
 
                 scoreDTOS.add(scoreDTO);
 
@@ -170,7 +205,10 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
+
 
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
@@ -178,10 +216,10 @@ public class UserServiceImpl implements UserService {
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
-
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
                 scoreDTOS.add(scoreDTO);
 
             }
@@ -210,7 +248,10 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
+
 
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
@@ -218,9 +259,10 @@ public class UserServiceImpl implements UserService {
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
 
                 scoreDTOS.add(scoreDTO);
 
@@ -257,7 +299,10 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
+
 
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
@@ -265,9 +310,10 @@ public class UserServiceImpl implements UserService {
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
 
                 scoreDTOS.add(scoreDTO);
 
@@ -300,7 +346,10 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
+
 
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
@@ -308,9 +357,10 @@ public class UserServiceImpl implements UserService {
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
 
                 scoreDTOS.add(scoreDTO);
 
@@ -373,7 +423,9 @@ public class UserServiceImpl implements UserService {
                 userDTO.setLocation(user.getLocation());
                 userDTO.setMobileNumber(user.getMobileNumber());
                 userDTO.setFb_id(user.getFb_id());
-                userDTO.setHighScore(user.getHighScore());
+                String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+                userDTO.setHighScore(enc);
+
 
                 userDTOS.add(userDTO);
             }
@@ -404,15 +456,19 @@ public class UserServiceImpl implements UserService {
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
 
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
+
             List<Score> scores = user.getScores();
             List<ScoreDTO> scoreDTOS = new ArrayList<>();
 
             for (Score score : scores) {
 
                 ScoreDTO scoreDTO = new ScoreDTO();
-                scoreDTO.setId(score.getId());
+                scoreDTO.setS_id(score.getS_id());
                 scoreDTO.setDate(score.getDate());
-                scoreDTO.setScore(score.getScore());
+                String encode = new Encoder().encode(Integer.toString(score.getScore()), user.getMobileNumber());
+                scoreDTO.setScore(encode);
 
                 scoreDTOS.add(scoreDTO);
 
@@ -444,7 +500,9 @@ public class UserServiceImpl implements UserService {
             userDTO.setLocation(user.getLocation());
             userDTO.setMobileNumber(user.getMobileNumber());
             userDTO.setFb_id(user.getFb_id());
-            userDTO.setHighScore(user.getHighScore());
+
+            String enc = new Encoder().encode(Integer.toString(user.getHighScore()), user.getMobileNumber());
+            userDTO.setHighScore(enc);
 
 
             userDTOS.add(userDTO);
@@ -462,6 +520,12 @@ public class UserServiceImpl implements UserService {
             ResponseModel res = new ResponseModel(HttpStatus.NOT_FOUND.value(), "User does not exists. ", false);
             return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
         }
+
+        for (Score score : byMobileNumber.get().getScores()) {
+            scoreRepository.delete(score);
+        }
+
+
         User user = byMobileNumber.get();
 
         userRepository.delete(user);

@@ -10,13 +10,13 @@ public class UserDTO implements Serializable {
     private String mobileNumber;
     private String location;
     private String fb_id;
-    private double highScore;
+    private String highScore;
     private List<ScoreDTO> scoreDTOS;
 
     public UserDTO() {
     }
 
-    public UserDTO(long id, String nickName, String gender, String mobileNumber, String location, String fb_id, double highScore, List<ScoreDTO> scoreDTOS) {
+    public UserDTO(long id, String nickName, String gender, String mobileNumber, String location, String fb_id, String highScore, List<ScoreDTO> scoreDTOS) {
         this.setId(id);
         this.setNickName(nickName);
         this.setGender(gender);
@@ -89,11 +89,11 @@ public class UserDTO implements Serializable {
         this.fb_id = fb_id;
     }
 
-    public double getHighScore() {
+    public String getHighScore() {
         return highScore;
     }
 
-    public void setHighScore(double highScore) {
+    public void setHighScore(String highScore) {
         this.highScore = highScore;
     }
 

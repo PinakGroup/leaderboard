@@ -16,6 +16,8 @@ public class UserController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody UserDTO userDTO) {
+
+        System.out.println("\n\n"+userDTO.getScoreDTOS().get(0).getScore()+"\n\n");
         try {
             return userService.save(userDTO);
         } catch (Exception e) {

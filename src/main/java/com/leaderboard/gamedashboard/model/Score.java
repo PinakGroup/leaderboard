@@ -10,7 +10,7 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long s_id;
     @Column(name = "score")
-    private double score;
+    private int score;
     @Column(name = "date")
     private Date date;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,7 +23,7 @@ public class Score {
 
     }
 
-    public Score(double score, Date date, User user) {
+    public Score(int score, Date date, User user) {
         this.setScore(score);
         this.setDate(date);
         this.setUser(user);
@@ -32,26 +32,19 @@ public class Score {
     @Override
     public String toString() {
         return "Score{" +
-                "s_id=" + getId() +
+                "s_id=" + getS_id() +
                 ", score=" + getScore() +
                 ", date=" + getDate() +
                 ", user=" + getUser() +
                 '}';
     }
 
-    public long getId() {
-        return s_id;
-    }
 
-    public void setId(long id) {
-        this.s_id = id;
-    }
-
-    public double getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
@@ -71,4 +64,11 @@ public class Score {
         this.user = user;
     }
 
+    public long getS_id() {
+        return s_id;
+    }
+
+    public void setS_id(long s_id) {
+        this.s_id = s_id;
+    }
 }

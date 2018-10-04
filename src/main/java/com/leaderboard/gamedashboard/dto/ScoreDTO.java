@@ -5,16 +5,16 @@ import java.util.Date;
 
 public class ScoreDTO implements Serializable {
 
-    private long id;
-    private double score;
+    private long s_id;
+    private String score;
     private Date date;
     private UserDTO userDTO;
 
     public ScoreDTO() {
     }
 
-    public ScoreDTO(long id, double score, Date date, UserDTO userDTO) {
-        this.setId(id);
+    public ScoreDTO(long s_id, String score, Date date, UserDTO userDTO) {
+        this.setS_id(s_id);
         this.setScore(score);
         this.setDate(date);
         this.setUserDTO(userDTO);
@@ -23,7 +23,7 @@ public class ScoreDTO implements Serializable {
     @Override
     public String toString() {
         return "ScoreDTO{" +
-                "id=" + getId() +
+                "s_id=" + getS_id() +
                 ", score=" + getScore() +
                 ", date=" + getDate() +
                 ", userDTO=" + getUserDTO() +
@@ -31,19 +31,12 @@ public class ScoreDTO implements Serializable {
     }
 
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public double getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(String score) {
         this.score = score;
     }
 
@@ -61,5 +54,13 @@ public class ScoreDTO implements Serializable {
 
     public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
+    }
+
+    public long getS_id() {
+        return s_id;
+    }
+
+    public void setS_id(long s_id) {
+        this.s_id = s_id;
     }
 }

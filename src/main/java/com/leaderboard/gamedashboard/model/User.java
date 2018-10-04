@@ -7,13 +7,11 @@ import java.util.List;
 @Table(name = "user")
 public class User {
 
-    @Column(name = "fb_id")
-    private
-    String fb_id;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "nick_name", unique = true, nullable = false)
+    @Column(name = "nick_name", nullable = false)
     private String nickName;
     @Column(name = "gender", nullable = false)
     private String gender;
@@ -21,15 +19,17 @@ public class User {
     private String mobileNumber;
     @Column(name = "location")
     private String location;
+    @Column(name = "fb_id")
+    private String fb_id;
     @Column(name = "high_score")
-    private double highScore;
+    private int highScore;
     @OneToMany(mappedBy = "user")
     private List<Score> scores;
 
     public User() {
     }
 
-    public User(String fb_id, String nickName, String gender, String mobileNumber, String location, double highScore, List<Score> scores) {
+    public User(String fb_id, String nickName, String gender, String mobileNumber, String location, int highScore, List<Score> scores) {
         this.setFb_id(fb_id);
         this.setNickName(nickName);
         this.setGender(gender);
@@ -101,11 +101,11 @@ public class User {
         this.location = location;
     }
 
-    public double getHighScore() {
+    public int getHighScore() {
         return highScore;
     }
 
-    public void setHighScore(double highScore) {
+    public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
 
